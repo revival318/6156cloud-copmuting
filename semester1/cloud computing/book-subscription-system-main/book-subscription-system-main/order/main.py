@@ -54,12 +54,11 @@ async def create_order(request: Request, db: Session = Depends(get_database_sess
 @app.post("/orders/buy")
 async def create_order(request: Request, db: Session = Depends(get_database_session)):
     data = await request.json()
-    print(data)
     user_id = data.split('user_id": ')[1].split(',')[0]
     book_id = data.split('book_id": "')[1].split('"')[0]
     book_name = data.split('book_name": "')[1].split('"')[0]
     price = data.split('price": ')[1].split(',')[0]
-    quantity = data.split('quantity": ')[1].split('}')[0]
+    quantity = data.split('quantity": "')[1].split('"}')[0]
     order = Order(user_id=int(user_id), book_id=int(book_id), book_name=str(book_name), price=float(price),
                   quantity=int(quantity), subscribed_at=datetime.now())
     db.add(order)

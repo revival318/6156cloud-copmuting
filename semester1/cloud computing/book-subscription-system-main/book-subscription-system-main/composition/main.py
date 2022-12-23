@@ -82,12 +82,13 @@ async def buy(request: Request):
     buy_detail = await request.json()
     book_id = buy_detail["book_id"]
     user_id = buy_detail["user_id"]
+    quantity = buy_detail["quantity"]
     response = requests.patch('http://localhost:8001/books/buy/' + str(book_id), json=json.dumps(dict(quantity=buy_detail["quantity"])))
     response = response.json()
     book_id = str(response["book"]["book_id"])
     book_name = response["book"]["book_name"]
     price = response["book"]["price"]
-    quantity = response["book"]["quantity"]
+    print(quantity)
     requests.post('http://localhost:8002/orders/buy', json = json.dumps({"user_id":user_id,"book_id":book_id,"book_name":book_name,"price":price,"quantity":quantity}))
     return JSONResponse(status_code=200, content={
         "status_code": 200,
